@@ -17,8 +17,7 @@
 #include <zephyr/arch/cpu.h>
 #include <zephyr/syscall.h>
 #include "macro_priv.inc"
-#include <arch/arm64/cpu.h>
-#include <arch/arm64/rk3399.h>
+
 _ASM_FILE_PROLOGUE
 
 /*
@@ -97,36 +96,17 @@ SECTION_FUNC(TEXT, z_arm64_context_switch)
 	ldp	x25, x26, [x0, #_thread_offset_to_callee_saved_x25_x26]
 	ldp	x27, x28, [x0, #_thread_offset_to_callee_saved_x27_x28]
 #ifndef CONFIG_ARM64_SAFE_EXCEPTION_STACK
-   ldp x29, x4,  [x0, #_thread_offset_to_callee_saved_x29_sp_el0]
-    /* Restore SP_EL0 */
-    msr sp_el0, x4
+	ldp	x29, x4,  [x0, #_thread_offset_to_callee_saved_x29_sp_el0]
+
+	/* Restore SP_EL0 */
+	msr	sp_el0, x4
 #else
-    ldr x29,      [x0, #_thread_offset_to_callee_saved_x29_sp_el0]
+	ldr	x29,      [x0, #_thread_offset_to_callee_saved_x29_sp_el0]
 #endif
-.global z_arm64_context_switch
-z_arm64_context_switch:
-    /* Enable RK3399 performance counter */
-    mrs x3, PMCR_EL0
-    orr x3, x3, #1
-    msr PMCR_EL0, x3
-    /* Restore SP_EL1 and return address */
-    ldp x4, lr, [x0, #_thread_offset_to_callee_saved_sp_elx_lr]
-    mov sp, x4
-    /* 
-     * Retrieve provided routine and argument from the stack.
-     * Routine pointer is in saved x0, argument in saved x1
-     * so we load them with x1/x0 (reversed).
-     */
-    ldp x1, x0, [sp, ___esf_t_x0_x1_OFFSET]
-.global z_arm64_enter_exc
-z_arm64_enter_exc:
-    /* Call RK3399 specific exception handling */
-    bl z_arm64_do_rk3399_exc_handling
-    /* ++_current_cpu->nested to be checked by arch_is_in_isr() */
-    get_cpu x2
-    ldr w3, [x2, #___cpu_t_nested_OFFSET]
-    add w4, w3, #1
-    str w4, [x2, #___cpu_t_nested_OFFSET]
+
+	/* Restore SP_EL1 and return address */
+	ldp	x4, lr, [x0, #_thread_offset_to_callee_saved_sp_elx_lr]
+	mov	sp, x4
 
 #if defined(CONFIG_ARM64_SAFE_EXCEPTION_STACK)
 	/* arch_curr_cpu()->arch.current_stack_limit = thread->arch.stack_limit */
