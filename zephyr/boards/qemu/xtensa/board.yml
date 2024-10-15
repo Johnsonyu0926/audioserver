@@ -1,0 +1,10 @@
+board:
+  name: qemu_xtensa
+  vendor: cdns
+  socs:
+  - name: dc233c
+    variants:
+    - name: mmu
+  - name: sample_controller32
+    variants:
+    - name: mpu
