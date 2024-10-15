@@ -797,42 +797,34 @@ struct arm_mmu_flat_range {
 	void *end;
 	uint32_t attrs;
 };
+static const struct arm_mmu_flat_range mmu_zephyr_ranges[] = { 
+    // RK3399 特定内存区域
+    { .name  = "RK3399_DRAM", 
+      .start = RK3399_DRAM_START, 
+      .end   = RK3399_DRAM_START + RK3399_DRAM_SIZE, 
+      .attrs = MT_NORMAL | MT_RW | MT_SECURE }, 
 
-static const struct arm_mmu_flat_range mmu_zephyr_ranges[] = {
+    { .name  = "RK3399_DEVICE", 
+      .start = RK3399_DEVICE_START, 
+      .end   = RK3399_DEVICE_START + RK3399_DEVICE_SIZE, 
+      .attrs = MT_DEVICE_nGnRE | MT_RW | MT_SECURE }, 
 
-	/* Mark the zephyr execution regions (data, bss, noinit, etc.)
-	 * cacheable, read-write
-	 * Note: read-write region is marked execute-never internally
-	 */
-	{ .name  = "zephyr_data",
-	  .start = _image_ram_start,
-	  .end   = _image_ram_end,
-	  .attrs = MT_NORMAL | MT_P_RW_U_NA | MT_DEFAULT_SECURE_STATE },
+    // 原有的 Zephyr 内存区域
+    { .name  = "zephyr_data",
+      .start = _image_ram_start,
+      .end   = _image_ram_end,
+      .attrs = MT_NORMAL | MT_P_RW_U_NA | MT_DEFAULT_SECURE_STATE },
 
-	/* Mark text segment cacheable,read only and executable */
-	{ .name  = "zephyr_code",
-	  .start = __text_region_start,
-	  .end   = __text_region_end,
-	  .attrs = MT_NORMAL | MT_P_RX_U_RX | MT_DEFAULT_SECURE_STATE },
+    { .name  = "zephyr_code",
+      .start = __text_region_start,
+      .end   = __text_region_end,
+      .attrs = MT_NORMAL | MT_P_RX_U_RX | MT_DEFAULT_SECURE_STATE },
 
-	/* Mark rodata segment cacheable, read only and execute-never */
-	{ .name  = "zephyr_rodata",
-	  .start = __rodata_region_start,
-	  .end   = __rodata_region_end,
-	  .attrs = MT_NORMAL | MT_P_RO_U_RO | MT_DEFAULT_SECURE_STATE },
-
-#ifdef CONFIG_NOCACHE_MEMORY
-	/* Mark nocache segment noncachable, read-write and execute-never */
-	{ .name  = "nocache_data",
-	  .start = _nocache_ram_start,
-	  .end   = _nocache_ram_end,
-	  .attrs = MT_NORMAL_NC | MT_P_RW_U_RW | MT_DEFAULT_SECURE_STATE },
-#endif
+    { .name  = "zephyr_rodata",
+      .start = __rodata_region_start,
+      .end   = __rodata_region_end,
+      .attrs = MT_NORMAL | MT_P_RO_U_RO | MT_DEFAULT_SECURE_STATE },
 };
-
-static inline void add_arm_mmu_flat_range(struct arm_mmu_ptables *ptables,
-					  const struct arm_mmu_flat_range *range,
-					  uint32_t extra_flags)
 {
 	uintptr_t address = (uintptr_t)range->start;
 	size_t size = (uintptr_t)range->end - address;
@@ -1687,10 +1679,39 @@ bool z_arm64_do_demand_paging(struct arch_esf *esf, uint64_t esr, uint64_t far)
 		/* this also counts as an access refresh */
 		phys = desc & PTE_PHYSADDR_MASK;
 		k_mem_paging_eviction_accessed(phys);
-		return true;
-	}
-
-	return false;
+    return true;
 }
+
+return false;
+}
+
+static int arm_mmu_init(const struct device *arg)
+{
+    uint64_t max_addr = RK3399_DRAM_START + RK3399_DRAM_SIZE;
+
+    ARG_UNUSED(arg);
+
+    /* Initialize page tables */
+    arm_mmu_init_tables(&kernel_ptables);
+
+    /* Set up memory regions */
+    mmu_init_mm(&kernel_ptables);
+
+    /* Set up MAIR */
+    write_mair_el1(MEMORY_ATTRIBUTES);
+
+    /* Set up TCR */
+    write_tcr_el1(get_tcr(max_addr));
+
+    /* Set TTBR0 */
+    write_ttbr0_el1((uint64_t)kernel_ptables.base_xlat_table);
+
+    /* Enable MMU */
+    enable_mmu();
+
+    return 0;
+}
+
+SYS_INIT(arm_mmu_init, PRE_KERNEL_1, CONFIG_KERNEL_INIT_PRIORITY_DEVICE);
 
 #endif /* CONFIG_DEMAND_PAGING */
