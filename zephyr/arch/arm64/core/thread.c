@@ -10,7 +10,7 @@
  *
  * Core thread related primitives for the ARM64 Cortex-A
  */
-#include <arch/arm64/rk3399.h>
+
 #include <zephyr/kernel.h>
 #include <ksched.h>
 #include <zephyr/arch/cpu.h>
@@ -49,42 +49,7 @@
  *    +---------------+ <- stack limit
  *    |  Stack guard  | } Z_ARM64_STACK_GUARD_SIZE (protected by MMU/MPU)
  *    +---------------+ <- stack_obj
-void arch_new_thread(struct k_thread *thread, k_thread_stack_t *stack,
-                     size_t stack_size, k_thread_entry_t entry,
-                     void *p1, void *p2, void *p3,
-                     int prio, unsigned int options)
-{
-    char *stack_ptr;
-    size_t stack_adjust;
-
-    /* 计算栈指针，考虑 RK3399 的对齐要求 */
-    stack_adjust = Z_ARM64_STACK_BASE_ALIGN + RK3399_STACK_ALIGN;
-    stack_ptr = Z_THREAD_STACK_BUFFER(stack);
-    stack_ptr += stack_size - stack_adjust;
-
-    z_setup_new_thread(thread, stack_ptr, stack_size, entry, p1, p2, p3,
-                       prio, options);
-
-    /* RK3399 特定的线程初始化 */
-    thread->arch.cpu_reg.sp = (uint64_t)stack_ptr;
-    thread->arch.cpu_reg.pc = (uint64_t)z_thread_entry;
-    thread->arch.cpu_reg.pstate = SPSR_EL1_MODE_EL0T | DAIF_FIQ_BIT;
-    thread->arch.cpu_reg.tpidr = RK3399_TPIDR_INIT;
-
-    /* 设置 RK3399 特定的栈保护 */
-    #ifdef CONFIG_RK3399_STACK_PROTECTION
-    z_rk3399_setup_stack_protection(thread, stack, stack_size);
-    #endif
-
-    /* 初始化 RK3399 性能计数器 */
-    #ifdef CONFIG_RK3399_PERF_COUNTER
-    z_rk3399_init_thread_perf_counter(thread);
-    #endif
-
-    LOG_DBG("New thread %p: stack ptr %p, size %zu", thread, stack_ptr, stack_size);
-    LOG_DBG("  entry: %p, p1: %p, p2: %p, p3: %p", entry, p1, p2, p3);
-}
-*
+ *
  * Low Memory addresses
  *
  *
@@ -230,12 +195,7 @@ FUNC_NORETURN void arch_user_mode_enter(k_thread_entry_t user_entry,
 	  [sp_el0] "r" (stack_el0),
 	  [sp_el1] "r" (stack_el1)
 	: "memory");
-void z_arm64_rk3399_thread_optimize(struct k_thread *thread)
-{
-    // 实现 RK3399 特定的线程优化
-}
+
 	CODE_UNREACHABLE;
 }
 #endif
-
-
