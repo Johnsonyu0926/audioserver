@@ -1,17 +1,25 @@
-#include <kernel.h>
-#include <zephyr/toolchain.h>
-#include <zephyr/linker/sections.h>
-#include <zephyr/arch/cpu.h>
-#include <zephyr/arch/arm64/debug_uart.h>
-#include <zephyr/syscall_handler.h>
-#include <zephyr/logging/log.h>
-#include <zephyr/fatal.h>
-#include <zephyr/debug/coredump.h>
-#include <zephyr/sys/poweroff.h>
+/*
+ * Copyright (c) 2019 Carlo Caione <ccaione@baylibre.com>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @file
+ * @brief Kernel fatal error handler for ARM64 Cortex-A
+ *
+ * This module provides the z_arm64_fatal_error() routine for ARM64 Cortex-A
+ * CPUs and z_arm64_do_kernel_oops() routine to manage software-generated fatal
+ * exceptions
+ */
+
+#include <zephyr/debug/symtab.h>
+#include <zephyr/drivers/pm_cpu_ops.h>
 #include <zephyr/arch/common/exc_handle.h>
-#include <zephyr/arch/common/ffs.h>
-#include <zephyr/kernel/thread_stack.h>
-#include <zephyr/arch/arm64/rk3399.h>  // 新添加的头文件
+#include <zephyr/kernel.h>
+#include <zephyr/logging/log.h>
+#include <zephyr/sys/poweroff.h>
+#include <kernel_arch_func.h>
 
 #include "paging.h"
 
@@ -22,23 +30,6 @@ K_KERNEL_PINNED_STACK_ARRAY_DEFINE(z_arm64_safe_exception_stacks,
 				   CONFIG_MP_MAX_NUM_CPUS,
 				   CONFIG_ARM64_SAFE_EXCEPTION_STACK_SIZE);
 
-void arch_system_halt(unsigned int reason)
-{
-    ARG_UNUSED(reason);
-
-    irq_lock();
-
-    LOG_ERR("System halted");
-
-    #ifdef CONFIG_RK3399
-    // RK3399 特定的系统停止处理
-    rk3399_system_halt(reason);
-    #endif
-
-    for (;;) {
-        /* Spin endlessly */
-    }
-}
 void z_arm64_safe_exception_stack_init(void)
 {
 	int cpu_id;
@@ -69,10 +60,7 @@ static void dump_esr(uint64_t esr, bool *dump_far)
 	const char *err;
 
 	switch (GET_ESR_EC(esr)) {
-	
-		void arch_system_halt(unsigned int reason)
-{
-case 0b000000: /* 0x00 */
+	case 0b000000: /* 0x00 */
 		err = "Unknown reason";
 		break;
 	case 0b000001: /* 0x01 */
@@ -92,8 +80,7 @@ case 0b000000: /* 0x00 */
 	case 0b000110: /* 0x06 */
 		err = "Trapped LDC or STC access";
 		break;
-    z_arm64_rk3399_system_halt(reason);
-  case 0b000111: /* 0x07 */
+	case 0b000111: /* 0x07 */
 		err = "Trapped access to SVE, Advanced SIMD, or "
 		      "floating-point functionality";
 		break;
@@ -186,8 +173,6 @@ case 0b000000: /* 0x00 */
 	case 0b111100: /* 0x3c */
 		err = "BRK instruction execution in AArch64 state.";
 		break;
-}
-	
 	default:
 		err = "Unknown";
 	}
@@ -466,15 +451,12 @@ FUNC_NORETURN void arch_syscall_oops(void *ssf_ptr)
 }
 #endif
 
-void z_arm64_rk3399_error_handler(unsigned int reason, const z_arch_esf_t *esf)
-{
 #if defined(CONFIG_PM_CPU_OPS_PSCI)
 FUNC_NORETURN void arch_system_halt(unsigned int reason)
 {
 	ARG_UNUSED(reason);
 
 	(void)arch_irq_lock();
-}
 
 #ifdef CONFIG_POWEROFF
 	sys_poweroff();
