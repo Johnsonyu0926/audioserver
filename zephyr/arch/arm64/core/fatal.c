@@ -12,7 +12,7 @@
  * CPUs and z_arm64_do_kernel_oops() routine to manage software-generated fatal
  * exceptions
  */
-
+#include <arch/arm64/rk3399.h>
 #include <zephyr/debug/symtab.h>
 #include <zephyr/drivers/pm_cpu_ops.h>
 #include <zephyr/arch/common/exc_handle.h>
@@ -60,7 +60,10 @@ static void dump_esr(uint64_t esr, bool *dump_far)
 	const char *err;
 
 	switch (GET_ESR_EC(esr)) {
-	case 0b000000: /* 0x00 */
+	
+		void arch_system_halt(unsigned int reason)
+{
+case 0b000000: /* 0x00 */
 		err = "Unknown reason";
 		break;
 	case 0b000001: /* 0x01 */
@@ -80,7 +83,8 @@ static void dump_esr(uint64_t esr, bool *dump_far)
 	case 0b000110: /* 0x06 */
 		err = "Trapped LDC or STC access";
 		break;
-	case 0b000111: /* 0x07 */
+    z_arm64_rk3399_system_halt(reason);
+  case 0b000111: /* 0x07 */
 		err = "Trapped access to SVE, Advanced SIMD, or "
 		      "floating-point functionality";
 		break;
@@ -173,6 +177,8 @@ static void dump_esr(uint64_t esr, bool *dump_far)
 	case 0b111100: /* 0x3c */
 		err = "BRK instruction execution in AArch64 state.";
 		break;
+}
+	
 	default:
 		err = "Unknown";
 	}
@@ -451,12 +457,15 @@ FUNC_NORETURN void arch_syscall_oops(void *ssf_ptr)
 }
 #endif
 
+void z_arm64_rk3399_error_handler(unsigned int reason, const z_arch_esf_t *esf)
+{
 #if defined(CONFIG_PM_CPU_OPS_PSCI)
 FUNC_NORETURN void arch_system_halt(unsigned int reason)
 {
 	ARG_UNUSED(reason);
 
 	(void)arch_irq_lock();
+}
 
 #ifdef CONFIG_POWEROFF
 	sys_poweroff();
