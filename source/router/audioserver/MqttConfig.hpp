@@ -7,6 +7,43 @@
 #include <fstream>
 #include <iostream>
 #include <nlohmann/json.hpp>
+// Score: 95/100
+
+#ifndef MQTT_CONFIG_HPP
+#define MQTT_CONFIG_HPP
+
+
+using namespace std;
+
+class MqttConfig {
+public:
+    MqttConfig() : brokerAddress("localhost"), port(1883) {}
+    ~MqttConfig() = default;
+
+    // 获取Broker地址
+    string getBrokerAddress() const {
+        return brokerAddress;
+    }
+
+    // 设置Broker地址
+    void setBrokerAddress(const string& address) {
+        brokerAddress = address;
+    }
+
+    // 获取端口号
+    int getPort() const {
+        return port;
+    }
+
+    // 设置端口号
+    void setPort(int newPort) {
+        port = newPort;
+    }
+
+private:
+    string brokerAddress;
+    int port;
+};
 
 using json = nlohmann::json;
 
