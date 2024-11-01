@@ -7,10 +7,22 @@
 #include "add_column_custom_audio_file.hpp"
 #include "audiocfg.hpp"
 #include "utils.h"
+#include <vector>
+#include <string>
 
 using namespace std;
 
 namespace asns {
+
+class GetAudioList {
+public:
+    std::vector<std::string> getList() const {
+        return audioList;
+    }
+
+private:
+    std::vector<std::string> audioList;
+};
 
     class CGetAudioData {
     public:
