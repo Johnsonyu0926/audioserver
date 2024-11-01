@@ -13,7 +13,15 @@
 
 #include <iostream>
 #include <string>
+#ifndef AUDIOPLAYSTATUS_HPP
+#define AUDIOPLAYSTATUS_HPP
 
+class AudioPlayStatus {
+public:
+    void play();
+    void pause();
+    void stop();
+};
 using namespace std;
 
 class AudioPlayStatus {
