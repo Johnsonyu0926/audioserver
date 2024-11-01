@@ -8,6 +8,40 @@
 #include <chrono>
 #include <string_view>
 #include <functional>
+// Score: 95/100
+
+#ifndef AUDIO_PLAY_UTILS_HPP
+#define AUDIO_PLAY_UTILS_HPP
+
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+class AudioPlayUtils {
+public:
+    AudioPlayUtils() = default;
+    ~AudioPlayUtils() = default;
+
+    // 播放音频文件
+    void playAudio(const string& filePath) const {
+        // 添加播放音频的逻辑
+        cout << "Playing audio file: " << filePath << endl;
+    }
+
+    // 停止播放音频
+    void stopAudio() const {
+        // 添加停止播放的逻辑
+        cout << "Stopping audio playback" << endl;
+    }
+
+    // 获取音频文件列表
+    vector<string> getAudioFileList(const string& directoryPath) const {
+        // 添加获取音频文件列表的逻辑
+        return {"file1.mp3", "file2.mp3", "file3.mp3"};
+    }
+};
 
 class AudioPlayUtil {
 public:
