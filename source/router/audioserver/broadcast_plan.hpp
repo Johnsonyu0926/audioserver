@@ -12,6 +12,9 @@
 class BroadcastPlan {
 public:
     BroadcastPlan() = default;
+    BroadcastPlan(const std::string& planName) : planName(planName) {}
+
+    std::string getPlanName() const { return planName; }
     BroadcastPlan(int id, std::string name, std::vector<std::string> audioFiles)
         : id_(id), name_(std::move(name)), audioFiles_(std::move(audioFiles)) {}
 
