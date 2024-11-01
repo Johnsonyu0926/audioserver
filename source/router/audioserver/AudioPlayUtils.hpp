@@ -28,25 +28,13 @@ using namespace std;
 
 class AudioPlayUtils {
 public:
-    AudioPlayUtils() = default;
-    ~AudioPlayUtils() = default;
-
-    // 播放音频文件
-    void playAudio(const string& filePath) const {
-        // 添加播放音频的逻辑
-        cout << "Playing audio file: " << filePath << endl;
+    static std::vector<std::string> getSupportedFormats() {
+        return {"mp3", "wav", "aac"};
     }
 
-    // 停止播放音频
-    void stopAudio() const {
-        // 添加停止播放的逻辑
-        cout << "Stopping audio playback" << endl;
-    }
-
-    // 获取音频文件列表
-    vector<string> getAudioFileList(const string& directoryPath) const {
-        // 添加获取音频文件列表的逻辑
-        return {"file1.mp3", "file2.mp3", "file3.mp3"};
+    static bool isFormatSupported(const std::string& format) {
+        auto supportedFormats = getSupportedFormats();
+        return std::find(supportedFormats.begin(), supportedFormats.end(), format) != supportedFormats.end();
     }
 };
 
