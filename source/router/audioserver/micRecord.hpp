@@ -4,10 +4,20 @@
 #include "audiocfg.hpp"
 #include "utils.h"
 #include "public.hpp"
+#include <string>
 
 //{"duration":"5","uploadUrl":"http://192.168.85.1:8091/iot/1v1/api/v1/micRecordUpload","cmd":"MicRecord"}
 namespace asns {
 
+
+class MicRecord {
+public:
+    MicRecord(const std::string& filePath) : filePath(filePath) {}
+
+    std::string getFilePath() const { return filePath; }
+
+private:
+    std::string filePath;
     class CMicRecordResult {
     public:
         NLOHMANN_DEFINE_TYPE_INTRUSIVE(CMicRecordResult, cmd, resultId, msg)
