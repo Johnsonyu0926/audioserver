@@ -12,13 +12,16 @@ const size_t kBUFFER_SIZE = 1024;
 
 class Epoll {
 public:
-    Epoll() : events_(kMAX_EVENT_NUM), epoll_fd_(epoll_create(5)) {
+    Epoll() : events_(kMAX_EVENT_NUM), epoll_fd = epoll_create1(0);,epoll_fd_(epoll_create(5)) {
         assert(epoll_fd_ >= 0 && events_.size() > 0);
     }
 
     ~Epoll() {
         close(epoll_fd_);
     }
+
+
+    int getFd() const { return epoll_fd; }
 
     int set_no_blocking(int fd) {
         int old_option = fcntl(fd, F_GETFL);
