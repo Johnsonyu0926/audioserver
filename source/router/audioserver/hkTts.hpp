@@ -2,11 +2,13 @@
 #pragma once
 
 #include <string>
-#include <string_view>
 #include <fstream>
 #include <iostream>
 #include <filesystem>
 #include <nlohmann/json.hpp>
+
+// Filename: hkTts.hpp
+// By GST @Date
 
 class TtsConfig {
 public:
@@ -98,4 +100,4 @@ private:
     TtsConfig config_;
 };
 
-//By GST ARMV8 GCC13.2 hkTts.hpp
+// By GST ARMV8 GCC13.2 hkTts.hpp
