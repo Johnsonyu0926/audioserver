@@ -2,3 +2,6 @@
   "gpioStatus": 1,
   "gpioModel": 1
 }
+{
+    "pin": "GPIO17"
+}
