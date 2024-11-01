@@ -1,6 +1,15 @@
 #pragma once
+#include <string>
 
-class CGpio {
+class Gpio {
+public:
+    Gpio(const std::string& pin) : pin(pin) {}
+
+    std::string getPin() const { return pin; }
+
+private:
+    std::string pin;
+};
 public:
     ~CGpio() = default;
 
