@@ -11,7 +11,14 @@
 
 #ifndef MQTT_CONFIG_HPP
 #define MQTT_CONFIG_HPP
+#ifndef MQTTCONFIG_HPP
+#define MQTTCONFIG_HPP
 
+class MqttConfig {
+public:
+    void loadConfig();
+    void saveConfig();
+};
 
 using namespace std;
 
