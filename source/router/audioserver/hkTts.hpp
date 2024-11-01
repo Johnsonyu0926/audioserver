@@ -4,6 +4,7 @@
 #include "json.hpp"
 #include "utils.h"
 #include "public.hpp"
+#include <string>
 
 #define NON_PLAY_PRIORITY 100
 
@@ -11,6 +12,19 @@ extern int g_playing_priority;
 using json = nlohmann::json;
 
 namespace asns {
+
+
+
+class HkTts {
+public:
+    HkTts(const std::string& text) : text(text) {}
+
+    std::string getText() const { return text; }
+
+private:
+    std::string text;
+};
+
     class CStartTTSAudioData {
     public:
         NLOHMANN_DEFINE_TYPE_INTRUSIVE(CStartTTSAudioData, indexCode, command, TTSContent, audioLevel, audioOutID,
