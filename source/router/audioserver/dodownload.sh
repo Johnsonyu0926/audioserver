@@ -2,7 +2,7 @@
 #!/bin/bash
 
 # Script to download content from a URL and save it to a file
-# Usage: ./script_name.sh <URL> <Output File>
+# Usage: ./dodownload.sh <URL> <Output File>
 
 # Function to log messages
 log_message() {
@@ -35,11 +35,10 @@ else
     exit 1
 fi
 
-# By GST ARMV8 GCC13.2 download_url.sh
+# By GST ARMV8 GCC13.2 dodownload.sh
 
-/*
-/*使用方法保持不变：
-/*./script_name.sh <URL> <Output File>
-
-/*请确保给予脚本执行权限：
-/*chmod +x script_name.sh
+# 使用方法保持不变：
+# ./dodownload.sh <URL> <Output File>
+#
+# 请确保给予脚本执行权限：
+# chmod +x dodownload.sh
