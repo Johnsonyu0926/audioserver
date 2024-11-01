@@ -1,4 +1,3 @@
-// audio_del.hpp
 #pragma once
 
 #include <string>
@@ -45,6 +44,17 @@ private:
     std::vector<CGetAudioData> data;
 };
 
+class AudioDel {
+public:
+    AudioDel() : fileName("default") {}
+
+    std::string getFileName() const { return fileName; }
+    void setFileName(const std::string& name) { fileName = name; }
+
+private:
+    std::string fileName;
+};
+
 class CDeleteAudio {
 public:
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(CDeleteAudio, cmd, deleteName, storageType)
@@ -57,7 +67,7 @@ public:
         return 0;
     }
 
-    [[nodiscard]] int do_req(std::shared_ptr<CSocket> pClient) {
+    [[nodiscard]] int do_req(const std::shared_ptr<CSocket>& pClient) {
         do_del(deleteName, storageType);
         CDeleteAudioResult res;
         res.do_success();
@@ -74,4 +84,4 @@ private:
 
 } // namespace asns
 
-//By GST ARMV8 GCC13.2 audio_del.hpp
+// By GST ARMV8 GCC13.2 audio_del.hpp
