@@ -8,7 +8,10 @@
 
 class CSThread;
 class CSocket;
-
+class ClientThread {
+public:
+    void run();
+};
 class CClientThread : public CSThread {
 public:
     CClientThread() = default;
