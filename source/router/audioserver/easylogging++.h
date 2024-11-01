@@ -1,15 +1,114 @@
-//
-//  Bismillah ar-Rahmaan ar-Raheem
-//
-//  Easylogging++ v9.97.1
-//  Single-header only, cross-platform logging library for C++ applications
-//
-//  Copyright (c) 2012-2024present @abumq (Majid Q.)
-//
-//  This library is released under the MIT Licence.
-//  https://github.com/abumq/easyloggingpp/blob/master/LICENSE
-//
+// Filename: easylogging++.h
+// By GST @Date
 
+#ifndef EASYLOGGINGPP_H
+#define EASYLOGGINGPP_H
+
+// Easylogging++ v9.97.1
+// Cross-platform logging library for C++ applications
+
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <map>
+#include <set>
+#include <list>
+#include <queue>
+#include <stack>
+#include <deque>
+#include <algorithm>
+#include <functional>
+#include <numeric>
+#include <iterator>
+#include <limits>
+#include <exception>
+#include <stdexcept>
+#include <cassert>
+#include <ctime>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cstdarg>
+#include <cctype>
+#include <cerrno>
+#include <climits>
+#include <cfloat>
+#include <cmath>
+#include <clocale>
+#include <csignal>
+#include <csetjmp>
+#include <cwchar>
+#include <cwctype>
+#include <locale>
+#include <utility>
+#include <typeinfo>
+#include <typeindex>
+#include <type_traits>
+#include <chrono>
+#include <thread>
+#include <mutex>
+#include <atomic>
+#include <condition_variable>
+#include <future>
+#include <memory>
+#include <shared_mutex>
+#include <system_error>
+#include <regex>
+#include <random>
+#include <ratio>
+#include <complex>
+#include <valarray>
+#include <initializer_list>
+#include <tuple>
+#include <new>
+#include <scoped_allocator>
+#include <codecvt>
+#include <locale>
+#include <filesystem>
+#include <any>
+#include <optional>
+#include <variant>
+#include <bitset>
+#include <span>
+#include <source_location>
+#include <version>
+#include <compare>
+#include <stop_token>
+#include <barrier>
+#include <latch>
+#include <semaphore>
+#include <syncstream>
+#include <ranges>
+#include <concepts>
+#include <coroutine>
+#include <format>
+#include <numbers>
+#include <execution>
+#include <print>
+#include <spanstream>
+#include <stacktrace>
+#include <stdexcept>
+#include <system_error>
+#include <type_traits>
+#include <utility>
+#include <version>
+#include <compare>
+#include <stop_token>
+#include <barrier>
+#include <latch>
+#include <semaphore>
+#include <syncstream>
+#include <ranges>
+#include <concepts>
+#include <coroutine>
+#include <format>
+#include <numbers>
+#include <execution>
+#include <print>
+#include <spanstream>
+#include <stacktrace>
 #ifndef EASYLOGGINGPP_H
 #define EASYLOGGINGPP_H
 // Compilers and C++0x/C++11 Evaluation
