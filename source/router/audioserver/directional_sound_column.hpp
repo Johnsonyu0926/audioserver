@@ -22,6 +22,13 @@
 extern std::atomic<int> g_playing_priority;
 extern asns::CVolumeSet g_volumeSet;
 
+class DirectionalSoundColumn {
+public:
+    DirectionalSoundColumn(const std::string& columnName)
+        : columnName(columnName) {}
+
+    std::string getColumnName() const { return columnName; }
+
 class DeviceBaseInfo {
 public:
     std::string codeVersion;
@@ -104,6 +111,7 @@ private:
     int relayStatus;
     int volume;
     int storageType;
+std::string columnName;
 };
 
 namespace asns {
