@@ -9,6 +9,21 @@
 #include <filesystem>
 #include <nlohmann/json.hpp>
 
+namespace asns {
+
+// 添加音频文件列类
+class AddColumnCustomAudioFile {
+public:
+    AddColumnCustomAudioFile() : columnName("default") {}
+
+    std::string getColumnName() const { return columnName; }
+    void setColumnName(const std::string& name) { columnName = name; }
+
+private:
+    std::string columnName;
+};
+
+// 自定义音频文件类
 class CustomAudioFile {
 public:
     CustomAudioFile(std::string id, std::string name, std::string path)
@@ -44,9 +59,10 @@ private:
     std::string path_;
 };
 
+// 自定义音频文件管理器类
 class CustomAudioFileManager {
 public:
-    explicit CustomAudioFileManager(std::filesystem::path configPath) 
+    explicit CustomAudioFileManager(std::filesystem::path configPath)
         : configPath_(std::move(configPath)) {}
 
     [[nodiscard]] bool load() {
@@ -103,14 +119,14 @@ public:
     void removeFile(const std::string& id) {
         files_.erase(
             std::remove_if(files_.begin(), files_.end(),
-                [&id](const CustomAudioFile& file) { return file.getId() == id; }),
+                           [&id](const CustomAudioFile& file) { return file.getId() == id; }),
             files_.end()
         );
     }
 
     [[nodiscard]] CustomAudioFile* findFile(const std::string& id) {
         auto it = std::find_if(files_.begin(), files_.end(),
-            [&id](const CustomAudioFile& file) { return file.getId() == id; });
+                               [&id](const CustomAudioFile& file) { return file.getId() == id; });
         return (it != files_.end()) ? &(*it) : nullptr;
     }
 
@@ -118,5 +134,7 @@ private:
     std::filesystem::path configPath_;
     std::vector<CustomAudioFile> files_;
 };
+
+} // namespace asns
 
 //By GST ARMV8 GCC13.2 accaf.hpp
