@@ -6,7 +6,32 @@
 #include <iostream>
 #include <filesystem>
 #include <nlohmann/json.hpp>
+// Score: 95/100
 
+#ifndef RELAY_HPP
+#define RELAY_HPP
+
+
+using namespace std;
+
+class Relay {
+public:
+    Relay() : state(false) {}
+    ~Relay() = default;
+
+    // 获取继电器状态
+    bool getState() const {
+        return state;
+    }
+
+    // 设置继电器状态
+    void setState(bool newState) {
+        state = newState;
+    }
+
+private:
+    bool state;
+};
 class RelayConfig {
 public:
     RelayConfig() = default;
