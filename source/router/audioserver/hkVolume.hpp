@@ -4,10 +4,22 @@
 #include "volume.hpp"
 #include "json.hpp"
 #include "utils.h"
-
+#include <string>
 using json = nlohmann::json;
 
 namespace asns {
+
+
+class HkVolume {
+public:
+    HkVolume(int volume) : volume(volume) {}
+
+    int getVolume() const { return volume; }
+
+private:
+    int volume;
+};
+
     class CHKVolumeInfo {
     public:
         NLOHMANN_DEFINE_TYPE_INTRUSIVE(CHKVolumeInfo, audioOutID, volume)
