@@ -5,9 +5,20 @@
 #include "utils.h"
 #include "volume.hpp"
 #include "Relay.hpp"
+#include <string>
 
 extern asns::CVolumeSet g_volumeSet;
 namespace asns {
+
+class GetDeviceBaseInfo {
+public:
+    GetDeviceBaseInfo(const std::string& deviceId) : deviceId(deviceId) {}
+
+    std::string getDeviceId() const { return deviceId; }
+
+private:
+    std::string deviceId;
+};
 
     class CDeviceBaseData {
     public:
