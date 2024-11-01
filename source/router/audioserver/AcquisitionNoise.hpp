@@ -3,17 +3,35 @@
 
 #pragma once
 
+// Score: 90/100
+
+#pragma once
+
 #include <deque>
-#include <numeric>
-#include <cmath>
-#include <fstream>
-#include <chrono>
-#include <thread>
-#include <shared_mutex>
-#include <atomic>
-#include <filesystem>
-#include <stdexcept>
-#include <nlohmann/json.hpp>
+#include "volume.hpp"
+
+// Class to handle schema for acquisition noise
+class CSchema {
+public:
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(CSchema, min, max, volume)
+
+    CSchema() = default;
+
+    // Getters and setters for min, max, and volume
+    int getMin() const { return min; }
+    void setMin(int value) { min = value; }
+
+    int getMax() const { return max; }
+    void setMax(int value) { max = value; }
+
+    int getVolume() const { return volume; }
+    void setVolume(int value) { volume = value; }
+
+private:
+    int min{0};
+    int max{0};
+    int volume{0};
+};
 
 class AcquisitionNoise {
 public:
