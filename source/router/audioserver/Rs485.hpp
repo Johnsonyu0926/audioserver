@@ -13,46 +13,56 @@
 #include "audiocfg.hpp"
 #include "AcquisitionNoise.hpp"
 
-static int m_rs485{-1};
-static int m_rsTty{1};
+    static int init_rs485(const char *device, int baudrate) {
+        m_rs485 = open(device, O_RDWR | O_NOCTTY | O_NONBLOCK);
+        if (m_rs485 == -1) {
+            perror("Unable to open RS485 device");
+            return -1;
+        }
 
-class Rs485 {
-public:
-    static const int MAX_SEND = 48;
+        struct termios tty{};
+        memset(&tty, 0, sizeof tty);
 
-    static void set_send_dir() {
-        system("echo 1 > /sys/class/gpio/gpio3/value");
+        if (tcgetattr(m_rs485, &tty) != 0) {
+            perror("tcgetattr");
+            close(m_rs485);
+            return -1;
+        }
+
+        cfsetospeed(&tty, baudrate);
+        cfsetispeed(&tty, baudrate);
+
+        tty.c_cflag = (tty.c_cflag & ~CSIZE) | CS8; // 8-bit chars
+        tty.c_iflag &= ~IGNBRK; // disable break processing
+        tty.c_lflag = 0; // no signaling chars, no echo,
+        tty.c_oflag = 0; // no remapping, no delays
+        tty.c_cc[VMIN]  = 0; // read doesn't block
+        tty.c_cc[VTIME] = 5; // 0.5 seconds read timeout
+
+        tty.c_iflag &= ~(IXON | IXOFF | IXANY); // shut off xon/xoff ctrl
+
+        tty.c_cflag |= (CLOCAL | CREAD); // ignore modem controls,
+        tty.c_cflag &= ~(PARENB | PARODD); // shut off parity
+        tty.c_cflag |= 0;
+        tty.c_cflag &= ~CSTOPB;
+        tty.c_cflag &= ~CRTSCTS;
+
+        if (tcsetattr(m_rs485, TCSANOW, &tty) != 0) {
+            perror("tcsetattr");
+            close(m_rs485);
+            return -1;
+        }
+
+        return 0;
     }
 
-    static void set_receive_dir() {
-        tcdrain(m_rs485);
-        system("echo 0 > /sys/class/gpio/gpio3/value");
-    }
-
-    static void noise_write(const int iFd) {
-        set_send_dir();
-        const unsigned char data[] = {0x01, 0x03, 0x00, 0x00, 0x00, 0x01, 0x84, 0x0A};
-        write(iFd, data, sizeof(data));
-        system("echo 0 > /sys/class/gpio/gpio3/value");
-    }
-
-    static ssize_t select_read(const int fd, unsigned char buffer[], const int length, int timeout) {
-        timeval time{};
-        time.tv_sec = timeout / 1000; // set the rcv wait time
-        time.tv_usec = timeout % 1000 * 1000; // 100000us = 0.1s
-
-        fd_set fs_read;
-        FD_ZERO(&fs_read); // 每次循环都要清空集合，否则不能检测描述符变化
-        FD_SET(fd, &fs_read); // 添加描述符
-
-        // 超时等待读变化，>0：就绪描述字的正数目， -1：出错， 0 ：超时
-        if (select(fd + 1, &fs_read, nullptr, nullptr, &time)) {
-            return read(fd, buffer, length);
-        } else {
-            // printf("select() failed: %s\n", strerror(errno));
-            return 0;
+    static void close_rs485() {
+        if (m_rs485 != -1) {
+            close(m_rs485);
+            m_rs485 = -1;
         }
     }
+};
 
     static int while_select(const int fd, unsigned char buffer[], const int length, int timeout) {
         timeval time{};
