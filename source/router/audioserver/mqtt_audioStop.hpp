@@ -1,6 +1,7 @@
 // mqtt_audiostop.hpp
 #pragma once
 
+
 #include <string>
 #include <string_view>
 #include <vector>
@@ -31,7 +32,7 @@ public:
     NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(CAudioStopResultData, null)
 
     template<typename Quest, typename Result, typename T>
-    int do_success(const CReQuest<Quest, Result> &c, CResult<T> &r) {
+    int do_success(const CReQuest<Quest, Result>&, CResult<T>& r) {
         AudioPlayUtil::audio_stop();
         r.resultId = 1;
         r.result = "success";
@@ -149,4 +150,4 @@ private:
     std::vector<AudioStop> audioConfig;
     std::unique_ptr<MqttClient> mqttClient;
 };
-//BY GST ARMV8 GCC 13.2
+// By GST @Date
