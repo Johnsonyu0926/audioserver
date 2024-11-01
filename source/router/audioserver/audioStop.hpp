@@ -8,6 +8,21 @@
 
 namespace asns {
 
+class AudioStop {
+public:
+    AudioStop() : isStopped(true) {}
+
+    void stop() {
+        isStopped = true;
+        // Stop logic here
+    }
+
+    bool getIsStopped() const { return isStopped; }
+
+private:
+    bool isStopped;
+};
+
 class CAudioStopResult {
 public:
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(CAudioStopResult, cmd, resultId, msg)
@@ -28,7 +43,7 @@ class CAudioStop {
 public:
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(CAudioStop, cmd)
 
-    [[nodiscard]] int do_req(std::shared_ptr<CSocket> pClient) const {
+    [[nodiscard]] int do_req(const std::shared_ptr<CSocket>& pClient) const {
         AudioPlayUtil::audio_stop();
         CAudioStopResult audioStopResult;
         audioStopResult.do_success();
