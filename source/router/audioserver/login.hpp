@@ -9,11 +9,28 @@
 #include "Relay.hpp"
 #include "AudioPlayStatus.hpp"
 
+#include <string>
+
 using namespace std;
 
 extern asns::CVolumeSet g_volumeSet;
 
 namespace asns {
+
+
+class Login {
+public:
+    Login(const std::string& username, const std::string& password)
+        : username(username), password(password) {}
+
+    std::string getUsername() const { return username; }
+    std::string getPassword() const { return password; }
+
+private:
+    std::string username;
+    std::string password;
+};
+
     class Lan{
     public:
         NLOHMANN_DEFINE_TYPE_INTRUSIVE(Lan, ip, netmask, gateway)
