@@ -16,6 +16,14 @@
 #include <vector>
 #include <algorithm>
 #include <numeric>
+#ifndef ACQUISITIONNOISE_HPP
+#define ACQUISITIONNOISE_HPP
+
+class AcquisitionNoise {
+public:
+    void start();
+    void stop();
+};
 
 using namespace std;
 
