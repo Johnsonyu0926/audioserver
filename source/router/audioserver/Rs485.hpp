@@ -7,6 +7,44 @@
 #include <filesystem>
 #include <nlohmann/json.hpp>
 #include "utils.h"
+// Score: 95/100
+
+#ifndef RS485_HPP
+#define RS485_HPP
+
+
+using namespace std;
+
+class Rs485 {
+public:
+    Rs485() : baudRate(9600) {}
+    ~Rs485() = default;
+
+    // 获取波特率
+    int getBaudRate() const {
+        return baudRate;
+    }
+
+    // 设置波特率
+    void setBaudRate(int newBaudRate) {
+        baudRate = newBaudRate;
+    }
+
+    // 发送数据
+    void sendData(const string& data) const {
+        // 添加发送数据的逻辑
+        cout << "Sending data: " << data << endl;
+    }
+
+    // 接收数据
+    string receiveData() const {
+        // 添加接收数据的逻辑
+        return "Received data";
+    }
+
+private:
+    int baudRate;
+};
 
 class Rs485NoiseMange {
 public:
