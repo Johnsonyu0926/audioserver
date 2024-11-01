@@ -16,7 +16,14 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#ifndef AUDIOPLAYUTILS_HPP
+#define AUDIOPLAYUTILS_HPP
 
+class AudioPlayUtils {
+public:
+    void initialize();
+    void cleanup();
+};
 using namespace std;
 
 class AudioPlayUtils {
