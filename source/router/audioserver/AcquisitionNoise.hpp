@@ -9,6 +9,39 @@
 
 #include <deque>
 #include "volume.hpp"
+#ifndef ACQUISITION_NOISE_HPP
+#define ACQUISITION_NOISE_HPP
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <numeric>
+
+using namespace std;
+
+class AcquisitionNoise {
+public:
+    AcquisitionNoise() = default;
+    ~AcquisitionNoise() = default;
+
+    // 添加注释，解释函数功能
+    // 计算噪声水平
+    double calculateNoiseLevel(const vector<double>& noiseData) const {
+        if (noiseData.empty()) {
+            return 0.0;
+        }
+        double sum = accumulate(noiseData.begin(), noiseData.end(), 0.0);
+        return sum / noiseData.size();
+    }
+
+    // 过滤噪声数据
+    vector<double> filterNoiseData(const vector<double>& noiseData, double threshold) const {
+        vector<double> filteredData;
+        copy_if(noiseData.begin(), noiseData.end(), back_inserter(filteredData),
+                [threshold](double noise) { return noise > threshold; });
+        return filteredData;
+    }
+};
 
 // Class to handle schema for acquisition noise
 class CSchema {
