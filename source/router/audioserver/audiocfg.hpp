@@ -9,7 +9,11 @@
 #include <nlohmann/json.hpp>
 
 class CAudioCfgBusiness {
+class AudioCfg {
 public:
+    AudioCfg(const std::string& config) : config(config) {}
+
+    std::string getConfig() const { return config; }
     CAudioCfgBusiness() = default;
     ~CAudioCfgBusiness() = default;
 
@@ -50,6 +54,7 @@ public:
 private:
     static constexpr const char* CONFIG_FILE = "/mnt/cfg/audio.json";
     nlohmann::json config_json;
+std::string config;
 };
 
 //By GST ARMV8 GCC13.2 audiocfg.hpp
