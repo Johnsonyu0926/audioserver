@@ -9,12 +9,12 @@
 #include <filesystem>
 #include <nlohmann/json.hpp>
 
+namespace asns {
+
 class BroadcastPlan {
 public:
     BroadcastPlan() = default;
-    BroadcastPlan(const std::string& planName) : planName(planName) {}
-
-    std::string getPlanName() const { return planName; }
+    BroadcastPlan(const std::string& planName) : name_(planName) {}
     BroadcastPlan(int id, std::string name, std::vector<std::string> audioFiles)
         : id_(id), name_(std::move(name)), audioFiles_(std::move(audioFiles)) {}
 
@@ -44,7 +44,7 @@ public:
     }
 
 private:
-    int id_;
+    int id_ = 0;
     std::string name_;
     std::vector<std::string> audioFiles_;
 };
@@ -108,14 +108,14 @@ public:
     void removePlan(int id) {
         plans_.erase(
             std::remove_if(plans_.begin(), plans_.end(),
-                [id](const BroadcastPlan& plan) { return plan.getId() == id; }),
+                           [id](const BroadcastPlan& plan) { return plan.getId() == id; }),
             plans_.end()
         );
     }
 
     [[nodiscard]] BroadcastPlan* findPlan(int id) {
         auto it = std::find_if(plans_.begin(), plans_.end(),
-            [id](const BroadcastPlan& plan) { return plan.getId() == id; });
+                               [id](const BroadcastPlan& plan) { return plan.getId() == id; });
         return (it != plans_.end()) ? &(*it) : nullptr;
     }
 
@@ -124,4 +124,6 @@ private:
     std::vector<BroadcastPlan> plans_;
 };
 
-//By GST ARMV8 GCC13.2 BroadcastPlan.hpp
+} // namespace asns
+
+// By GST ARMV8 GCC13.2 BroadcastPlan.hpp
