@@ -1,15 +1,3 @@
-//
-//  Bismillah ar-Rahmaan ar-Raheem
-//
-//  Easylogging++ v9.97.1
-//  Cross-platform logging library for C++ applications
-//
-//  Copyright (c) 2012-2024present @abumq (Majid Q.)
-//
-//  This library is released under the MIT Licence.
-//  https://github.com/abumq/easyloggingpp/blob/master/LICENSE
-//
-
 #include "easylogging++.h"
 
 #if defined(AUTO_INITIALIZE_EASYLOGGINGPP)
