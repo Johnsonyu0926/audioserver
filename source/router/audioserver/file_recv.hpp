@@ -8,6 +8,11 @@
 #include <unistd.h>
 #include <errno.h>
 
+class FileRecv {
+public:
+    FileRecv(const std::string& filePath) : filePath(filePath) {}
+
+    std::string getFilePath() const { return filePath; }
 class Server {
 public:
     Server(uint16_t port) : port_(port) {
@@ -75,4 +80,5 @@ private:
     int fd_;
     int port_;
     struct sockaddr_in server_addr_;
+    std::string filePath;
 };
