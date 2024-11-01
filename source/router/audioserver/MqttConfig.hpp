@@ -24,31 +24,16 @@ using namespace std;
 
 class MqttConfig {
 public:
-    MqttConfig() : brokerAddress("localhost"), port(1883) {}
-    ~MqttConfig() = default;
+    MqttConfig() : broker("localhost"), port(1883) {}
 
-    // 获取Broker地址
-    string getBrokerAddress() const {
-        return brokerAddress;
-    }
+    std::string getBroker() const { return broker; }
+    void setBroker(const std::string& brk) { broker = brk; }
 
-    // 设置Broker地址
-    void setBrokerAddress(const string& address) {
-        brokerAddress = address;
-    }
-
-    // 获取端口号
-    int getPort() const {
-        return port;
-    }
-
-    // 设置端口号
-    void setPort(int newPort) {
-        port = newPort;
-    }
+    int getPort() const { return port; }
+    void setPort(int prt) { port = prt; }
 
 private:
-    string brokerAddress;
+    std::string broker;
     int port;
 };
 
