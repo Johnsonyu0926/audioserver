@@ -7,6 +7,29 @@
 #include <filesystem>
 #include <nlohmann/json.hpp>
 #include "utils.h"
+// Score: 95/100
+
+#ifndef RS485_NOISE_MANAGE_HPP
+#define RS485_NOISE_MANAGE_HPP
+
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+class Rs485NoiseManage {
+public:
+    Rs485NoiseManage() = default;
+    ~Rs485NoiseManage() = default;
+
+    // 过滤噪声数据
+    vector<double> filterNoiseData(const vector<double>& noiseData, double threshold) const {
+        vector<double> filteredData;
+        copy_if(noiseData.begin(), noiseData.end(), back_inserter(filteredData),
+                [threshold](double noise) { return noise > threshold; });
+        return filteredData;
+    }
+};
 
 class Rs485NoiseMange {
 public:
