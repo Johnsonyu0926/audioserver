@@ -13,29 +13,44 @@
 #include "Rs485NoiseMange.hpp"
 #include <iostream>
 #include <string_view>
-#include "clientthread.h"
+
+ClientThread::ClientThread() : isRunning(false) {}
+
+void ClientThread::start() {
+    isRunning = true;
+    std::cout << "Client thread started" << std::endl;
+}
+
+void ClientThread::stop() {
+    isRunning = false;
+    std::cout << "Client thread stopped" << std::endl;
+}
+
+bool ClientThread::getIsRunning() const {
+    return isRunning;
+}
 
 void ClientThread::run() {
     // Thread logic here
 }
 
 bool CClientThread::InitInstance() {
-    // Initialization code.
+    // Initialization code
     return true;
 }
 
 bool CClientThread::ExitInstance() {
-    // Cleanup code.
+    // Cleanup code
     return true;
 }
 
 bool CClientThread::Check(const unsigned char* szBuf) const {
-    // Check the buffer.
+    // Check the buffer
     return true;
 }
 
 bool CClientThread::Gen(unsigned char* szBuf) const {
-    // Generate data for the buffer.
+    // Generate data for the buffer
     return true;
 }
 
@@ -53,7 +68,7 @@ int CClientThread::do_req(std::string_view buf, std::shared_ptr<CSocket> pClient
         } else if (cmd == "BroadcastPlan") {
             return j.get<asns::BroadcastPlan>().do_req(pClient);
         }
-        // Add more commands as needed.
+        // Add more commands as needed
     } catch (const nlohmann::json::exception& e) {
         std::cerr << "JSON parsing error: " << e.what() << std::endl;
         return -1;
@@ -62,18 +77,18 @@ int CClientThread::do_req(std::string_view buf, std::shared_ptr<CSocket> pClient
 }
 
 int CClientThread::do_verify(std::string_view buf) const {
-    // Verification code.
+    // Verification code
     return 0;
 }
 
 int CClientThread::do_str_req(std::shared_ptr<CSocket> pClient) {
-    // String request handling code.
+    // String request handling code
     return 0;
 }
 
 int CClientThread::do_str_verify(std::string_view buf, std::shared_ptr<CSocket> pClient) const {
-    // String verification code.
+    // String verification code
     return 0;
 }
 
-//By GST ARMV8 GCC13.2 clientthread.cpp
+// By GST ARMV8 GCC13.2 clientthread.cpp
