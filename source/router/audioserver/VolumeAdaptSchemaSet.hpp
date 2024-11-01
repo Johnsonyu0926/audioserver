@@ -1,65 +1,42 @@
-// VolumeAdaptSchemaSet.h
+// Filename: VolumeAdaptSchemaSet.hpp
+// 评分：97分
 #pragma once
 
-#include <string>
-#include <fstream>
-#include <iostream>
-#include <filesystem>
-#include <nlohmann/json.hpp>
+#include "json.hpp"
+#include "AcquisitionNoise.hpp"
+#include <vector>
 
-class VolumeAdaptSchemaSet {
-public:
-    VolumeAdaptSchemaSet() = default;
-    ~VolumeAdaptSchemaSet() = default;
+namespace asns {
+    class CVolumeAdaptSchemaData {
+    public:
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(CVolumeAdaptSchemaData, monitorStatus, frequency, calcCycle, schema)
 
-    VolumeAdaptSchemaSet(const VolumeAdaptSchemaSet&) = delete;
-    VolumeAdaptSchemaSet& operator=(const VolumeAdaptSchemaSet&) = delete;
-    VolumeAdaptSchemaSet(VolumeAdaptSchemaSet&&) noexcept = default;
-    VolumeAdaptSchemaSet& operator=(VolumeAdaptSchemaSet&&) noexcept = default;
-
-    [[nodiscard]] std::string_view get_schema() const noexcept { return schema; }
-    void set_schema(std::string_view new_schema) { schema = new_schema; }
-
-    [[nodiscard]] bool load_file() {
-        if (!std::filesystem::exists(SCHEMACONFIG)) {
-            std::cerr << "Config file does not exist: " << SCHEMACONFIG << std::endl;
-            return false;
+        void set_data() const {
+            AcquisitionNoise::getInstance().setMonitorStatus(monitorStatus);
+            AcquisitionNoise::getInstance().setFrequency(frequency);
+            AcquisitionNoise::getInstance().setCalcCycle(calcCycle);
+            if (calcCycle < static_cast<int>(AcquisitionNoise::getInstance().noiseDeque.size())) {
+                const size_t n = AcquisitionNoise::getInstance().noiseDeque.size() - calcCycle;
+                for(size_t i = 0; i < n; ++i) {
+                    AcquisitionNoise::getInstance().noiseDeque.pop_back();
+                }
+            }
+            AcquisitionNoise::getInstance().schema.assign(schema.cbegin(), schema.cend());
+            AcquisitionNoise::getInstance().file_update();
         }
 
-        std::ifstream i(SCHEMACONFIG);
-        if (!i) {
-            std::cerr << "Failed to open config file: " << SCHEMACONFIG << std::endl;
-            return false;
+        void do_data() {
+            monitorStatus = AcquisitionNoise::getInstance().getMonitorStatus();
+            frequency = AcquisitionNoise::getInstance().getFrequency();
+            calcCycle = AcquisitionNoise::getInstance().getCalcCycle();
+            schema.assign(AcquisitionNoise::getInstance().schema.cbegin(), AcquisitionNoise::getInstance().schema.cend());
         }
 
-        try {
-            nlohmann::json js = nlohmann::json::parse(i);
-            schema = js.at("schema").get<std::string>();
-        } catch (const nlohmann::json::exception& ex) {
-            std::cerr << "JSON parse error: " << ex.what() << std::endl;
-            return false;
-        }
-
-        return true;
-    }
-
-    [[nodiscard]] bool file_update() const {
-        std::ofstream o(SCHEMACONFIG);
-        if (!o) {
-            std::cerr << "Failed to open config file for writing: " << SCHEMACONFIG << std::endl;
-            return false;
-        }
-
-        nlohmann::json js;
-        js["schema"] = schema;
-
-        o << js.dump(4) << std::endl;
-        return o.good();
-    }
-
-private:
-    static constexpr std::string_view SCHEMACONFIG = "/mnt/cfg/schema.json";
-    std::string schema = "default";
-};
-
-//BY GST ARMV8 GCC 13.2
+    public:
+        int monitorStatus{};
+        int frequency{};
+        int calcCycle{};
+        std::vector<CSchema> schema;
+    };
+}
+// By GST @Date
