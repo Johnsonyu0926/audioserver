@@ -11,6 +11,9 @@
 #include "Relay.hpp"
 #include "AudioPlayStatus.hpp"
 
+// Filename: login.hpp
+// By GST ARMV8 GCC 13.2
+
 namespace asns {
 
 extern CVolumeSet g_volumeSet;
@@ -224,4 +227,4 @@ private:
 
 } // namespace asns
 
-//BY GST ARMV8 GCC 13.2
+// By GST ARMV8 GCC 13.2
