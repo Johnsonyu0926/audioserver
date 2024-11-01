@@ -3,7 +3,8 @@
 #ifdef __FreeBSD__
 #include <sys/types.h>
 #endif
-
+#include <iostream>
+#include "audio.hpp"
 #include <thread>
 #include <unistd.h>
 #include <string.h>
@@ -115,6 +116,16 @@ int main(int argc, char **argv) {
     int nBlockCount = 1; // k --> max 64, 32k
     int nDataSize = 1;     // K -> 1024k.
     int nReadCount = 0;
+
+
+int main() {
+    Audio audio;
+    audio.play();
+    std::cout << "Audio is playing" << std::endl;
+    audio.stop();
+    std::cout << "Audio stopped" << std::endl;
+    return 0;
+}
 
     BOOL bHttpClient = FALSE;
 
