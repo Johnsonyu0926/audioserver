@@ -2,10 +2,10 @@
 #pragma once
 
 #include <string>
-#include <string_view>
 #include <fstream>
 #include <iostream>
 #include <nlohmann/json.hpp>
+#include <filesystem>
 
 class DeviceBaseInfo {
 public:
@@ -90,5 +90,7 @@ private:
     std::string configPath_;
     DeviceBaseInfo deviceInfo_;
 };
+
+// By GST ARMV8 GCC13.2 getDeviceBaseInfo.hpp
 
 //By GST ARMV8 GCC13.2 getDeviceBaseInfo.hpp
