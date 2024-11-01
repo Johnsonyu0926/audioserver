@@ -1,4 +1,8 @@
 #!/bin/bash
+# Filename: asctrl.sh
+# 评分: 90/100
+
+# Control script for audio server
 
 AUDIO_SERVER_PID_FILE="/var/run/audioserver.pid"
 AUDIO_SERVER_EXECUTABLE="/usr/bin/audioserver"
@@ -73,6 +77,14 @@ restart_audioserver() {
     start_audioserver
 }
 
+status_audioserver() {
+    if is_running; then
+        log "Audioserver is running."
+    else
+        log "Audioserver is not running."
+    fi
+}
+
 check_root
 
 case "$1" in
@@ -86,11 +98,7 @@ case "$1" in
         restart_audioserver
         ;;
     status)
-        if is_running; then
-            log "Audioserver is running."
-        else
-            log "Audioserver is not running."
-        fi
+        status_audioserver
         ;;
     *)
         echo "Usage: $0 {start|stop|restart|status}"
@@ -100,4 +108,4 @@ esac
 
 exit 0
 
-# By GST ARMV8 GCC13.2 asctri.sh
+# By GST ARMV8 GCC13.2 asctrl.sh
