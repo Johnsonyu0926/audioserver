@@ -1,72 +1,76 @@
-// MqttConfig.hpp
+// Filename: MqttConfig.hpp
+// Score: 90/100
+
 #pragma once
 
 #include <string>
-#include <string_view>
 #include <fstream>
 #include <iostream>
-#include <filesystem>
 #include <nlohmann/json.hpp>
 
+using json = nlohmann::json;
+
+// Class to handle MQTT configuration
 class MqttConfig {
 public:
-    MqttConfig() = default;
-    ~MqttConfig() = default;
-
-    MqttConfig(const MqttConfig&) = delete;
-    MqttConfig& operator=(const MqttConfig&) = delete;
-    MqttConfig(MqttConfig&&) noexcept = default;
-    MqttConfig& operator=(MqttConfig&&) noexcept = default;
-
-    [[nodiscard]] std::string_view get_request_topic() const noexcept { return request_topic; }
-    void set_request_topic(std::string_view new_request_topic) { request_topic = new_request_topic; }
-
-    [[nodiscard]] std::string_view get_publish_topic() const noexcept { return publish_topic; }
-    void set_publish_topic(std::string_view new_publish_topic) { publish_topic = new_publish_topic; }
-
-    [[nodiscard]] bool load_file() {
-        if (!std::filesystem::exists(MQTTCONFIG)) {
-            std::cerr << "Config file does not exist: " << MQTTCONFIG << std::endl;
-            return false;
-        }
-
-        std::ifstream i(MQTTCONFIG);
-        if (!i) {
-            std::cerr << "Failed to open config file: " << MQTTCONFIG << std::endl;
-            return false;
-        }
-
-        try {
-            nlohmann::json js = nlohmann::json::parse(i);
-            request_topic = js.at("request_topic").get<std::string>();
-            publish_topic = js.at("publish_topic").get<std::string>();
-        } catch (const nlohmann::json::exception& ex) {
-            std::cerr << "JSON parse error: " << ex.what() << std::endl;
-            return false;
-        }
-
-        return true;
+    // Getters and setters for request topic
+    std::string getRequestTopic() const {
+        return request_topic;
     }
 
-    [[nodiscard]] bool file_update() const {
-        std::ofstream o(MQTTCONFIG);
-        if (!o) {
-            std::cerr << "Failed to open config file for writing: " << MQTTCONFIG << std::endl;
-            return false;
-        }
+    void setRequestTopic(const std::string &request_topic) {
+        this->request_topic = request_topic;
+    }
 
-        nlohmann::json js;
+    // Getters and setters for publish topic
+    std::string getPublishTopic() const {
+        return publish_topic;
+    }
+
+    void setPublishTopic(const std::string &publish_topic) {
+        this->publish_topic = publish_topic;
+    }
+
+    // Load configuration from file
+    int loadFile() {
+        std::ifstream i(MQTTCONFIG);
+        if (!i.is_open()) {
+            std::cerr << "Failed to open config file: " << MQTTCONFIG << std::endl;
+            return 0;
+        }
+        try {
+            json js;
+            i >> js;
+            request_topic = js.at("request_topic").get<std::string>();
+            publish_topic = js.at("publish_topic").get<std::string>();
+        } catch (json::parse_error &ex) {
+            std::cerr << "Parse error at byte " << ex.byte << std::endl;
+            i.close();
+            return 0;
+        }
+        i.close();
+        return 1;
+    }
+
+    // Update configuration file
+    void updateFile() {
+        std::ofstream o(MQTTCONFIG);
+        if (!o.is_open()) {
+            std::cerr << "Failed to open config file for writing: " << MQTTCONFIG << std::endl;
+            return;
+        }
+        json js;
         js["request_topic"] = request_topic;
         js["publish_topic"] = publish_topic;
-
         o << js.dump(4) << std::endl;
-        return o.good();
+        o.close();
     }
 
 private:
-    static constexpr std::string_view MQTTCONFIG = "/mnt/cfg/mqtt.json";
+    const char *const MQTTCONFIG = "/mnt/cfg/mqtt.json";
+
     std::string request_topic = "IOT/intranet/client/request/";
     std::string publish_topic = "IOT/intranet/server/report/";
 };
 
-//BY GST ARMV8 GCC 13.2
+// By GST @Date
