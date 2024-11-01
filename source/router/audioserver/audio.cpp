@@ -12,12 +12,30 @@
 #include "spdlog/sinks/rotating_file_sink.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 
-// ... [保留之前的 initializeLogging 函数] ...
+Audio::Audio() : volume(50) {}
+
+void Audio::play(const std::string& file) {
+    std::cout << "Playing audio file: " << file << std::endl;
+}
+
+void Audio::stop() {
+    std::cout << "Stopping audio playback" << std::endl;
+}
+
+int Audio::getVolume() const {
+    return volume;
+}
+
+void Audio::setVolume(int vol) {
+    volume = vol;
+}
 
 class AudioServer {
 public:
     AudioServer() = default;
-    ~AudioServer() = default;
+    ~AudioServer() {
+        stop();
+    }
 
     void start() {
         loadConfig();
@@ -66,7 +84,7 @@ private:
         }
     }
 
-    // 新增：处理自定义音频播放请求的方法
+    // 处理自定义音频播放请求的方法
     void handleCustomAudioPlayRequest(const std::string& fileName) {
         const CustomAudio* audio = customAudioManager.findAudioByName(fileName);
         if (audio) {
@@ -85,6 +103,18 @@ private:
     CustomAudioManager customAudioManager;
 };
 
+void initializeLogging() {
+    auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+    auto file_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>("logs/audioserver.log", 1024 * 1024 * 10, 3);
+
+    spdlog::sinks_init_list sink_list = {file_sink, console_sink};
+    auto logger = std::make_shared<spdlog::logger>("multi_sink", sink_list.begin(), sink_list.end());
+    
+    spdlog::set_default_logger(logger);
+    spdlog::set_level(spdlog::level::debug); // Set global log level to debug
+    spdlog::flush_on(spdlog::level::debug); // Flush log on every debug statement
+}
+
 int main() {
     initializeLogging();
     spdlog::info("Application started");
@@ -100,4 +130,4 @@ int main() {
     return 0;
 }
 
-//By GST ARMV8 GCC13.2 audio.cpp
+// By GST ARMV8 GCC13.2 audio.cpp
