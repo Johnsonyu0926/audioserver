@@ -54,24 +54,20 @@ public:
 // Class to handle schema for acquisition noise
 class CSchema {
 public:
-    NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(CSchema, min, max, volume)
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(CSchema, volume, noise)
+    // Constructor
+    CSchema() : volume(0), noise(0) {}
 
-    CSchema() = default;
-
-    // Getters and setters for min, max, and volume
-    int getMin() const { return min; }
-    void setMin(int value) { min = value; }
-
-    int getMax() const { return max; }
-    void setMax(int value) { max = value; }
-
+    // Getters and Setters
     int getVolume() const { return volume; }
-    void setVolume(int value) { volume = value; }
+    void setVolume(int vol) { volume = vol; }
+
+    int getNoise() const { return noise; }
+    void setNoise(int noi) { noise = noi; }
 
 private:
-    int min{0};
-    int max{0};
-    int volume{0};
+    int volume;
+    int noise;
 };
 
 class AcquisitionNoise {
