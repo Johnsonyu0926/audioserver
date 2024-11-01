@@ -1,22 +1,90 @@
-//     __ _____ _____ _____
-//  __|  |   __|     |   | |  JSON for Modern C++
-// |  |  |__   |  |  | | | |  version 3.11.2
-// |_____|_____|_____|_|___|  https://github.com/nlohmann/json
-//
-// SPDX-FileCopyrightText: 2013-2022 Niels Lohmann <https://nlohmann.me>
-// SPDX-License-Identifier: MIT
+#pragma once
 
-/****************************************************************************\
- * Note on documentation: The source files contain links to the online      *
- * documentation of the public API at https://json.nlohmann.me. This URL    *
- * contains the most recent documentation and should also be applicable to  *
- * previous versions; documentation for deprecated functions is not         *
- * removed, but marked deprecated. See "Generate documentation" section in  *
- * file docs/README.md.                                                     *
-\****************************************************************************/
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <map>
+#include <set>
+#include <list>
+#include <queue>
+#include <stack>
+#include <deque>
+#include <algorithm>
+#include <functional>
+#include <numeric>
+#include <iterator>
+#include <limits>
+#include <exception>
+#include <stdexcept>
+#include <cassert>
+#include <ctime>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cstdarg>
+#include <cctype>
+#include <cerrno>
+#include <climits>
+#include <cfloat>
+#include <cmath>
+#include <clocale>
+#include <csignal>
+#include <csetjmp>
+#include <cwchar>
+#include <cwctype>
+#include <locale>
+#include <utility>
+#include <typeinfo>
+#include <typeindex>
+#include <type_traits>
+#include <chrono>
+#include <thread>
+#include <mutex>
+#include <atomic>
+#include <condition_variable>
+#include <future>
+#include <memory>
+#include <shared_mutex>
+#include <system_error>
+#include <regex>
+#include <random>
+#include <ratio>
+#include <complex>
+#include <valarray>
+#include <initializer_list>
+#include <tuple>
+#include <new>
+#include <scoped_allocator>
+#include <codecvt>
+#include <locale>
+#include <filesystem>
+#include <any>
+#include <optional>
+#include <variant>
+#include <bitset>
+#include <span>
+#include <source_location>
+#include <version>
+#include <compare>
+#include <stop_token>
+#include <barrier>
+#include <latch>
+#include <semaphore>
+#include <syncstream>
+#include <ranges>
+#include <concepts>
+#include <coroutine>
+#include <format>
+#include <numbers>
+#include <execution>
+#include <print>
+#include <spanstream>
+#include <stacktrace>
 
-#ifndef INCLUDE_NLOHMANN_JSON_HPP_
-#define INCLUDE_NLOHMANN_JSON_HPP_
+#ifndef JSON_HPP
+#define JSON_HPP
 
 #include <algorithm> // all_of, find, for_each
 #include <cstddef> // nullptr_t, ptrdiff_t, size_t
@@ -32,31 +100,7 @@
 #include <utility> // declval, forward, move, pair, swap
 #include <vector> // vector
 
-// #include <nlohmann/adl_serializer.hpp>
-//     __ _____ _____ _____
-//  __|  |   __|     |   | |  JSON for Modern C++
-// |  |  |__   |  |  | | | |  version 3.11.2
-// |_____|_____|_____|_|___|  https://github.com/nlohmann/json
-//
-// SPDX-FileCopyrightText: 2013-2022 Niels Lohmann <https://nlohmann.me>
-// SPDX-License-Identifier: MIT
-
-
-
 #include <utility>
-
-// #include <nlohmann/detail/abi_macros.hpp>
-//     __ _____ _____ _____
-//  __|  |   __|     |   | |  JSON for Modern C++
-// |  |  |__   |  |  | | | |  version 3.11.2
-// |_____|_____|_____|_|___|  https://github.com/nlohmann/json
-//
-// SPDX-FileCopyrightText: 2013-2022 Niels Lohmann <https://nlohmann.me>
-// SPDX-License-Identifier: MIT
-
-
-
-// This file contains all macro definitions affecting or depending on the ABI
 
 #ifndef JSON_SKIP_LIBRARY_VERSION_CHECK
     #if defined(NLOHMANN_JSON_VERSION_MAJOR) && defined(NLOHMANN_JSON_VERSION_MINOR) && defined(NLOHMANN_JSON_VERSION_PATCH)
@@ -147,102 +191,8 @@
     }  // namespace nlohmann
 #endif
 
-// #include <nlohmann/detail/conversions/from_json.hpp>
-//     __ _____ _____ _____
-//  __|  |   __|     |   | |  JSON for Modern C++
-// |  |  |__   |  |  | | | |  version 3.11.2
-// |_____|_____|_____|_|___|  https://github.com/nlohmann/json
-//
-// SPDX-FileCopyrightText: 2013-2022 Niels Lohmann <https://nlohmann.me>
-// SPDX-License-Identifier: MIT
-
-
-
-#include <algorithm> // transform
-#include <array> // array
-#include <forward_list> // forward_list
-#include <iterator> // inserter, front_inserter, end
-#include <map> // map
-#include <string> // string
-#include <tuple> // tuple, make_tuple
-#include <type_traits> // is_arithmetic, is_same, is_enum, underlying_type, is_convertible
-#include <unordered_map> // unordered_map
-#include <utility> // pair, declval
-#include <valarray> // valarray
-
-// #include <nlohmann/detail/exceptions.hpp>
-//     __ _____ _____ _____
-//  __|  |   __|     |   | |  JSON for Modern C++
-// |  |  |__   |  |  | | | |  version 3.11.2
-// |_____|_____|_____|_|___|  https://github.com/nlohmann/json
-//
-// SPDX-FileCopyrightText: 2013-2022 Niels Lohmann <https://nlohmann.me>
-// SPDX-License-Identifier: MIT
-
-
-
-#include <cstddef> // nullptr_t
-#include <exception> // exception
-#include <stdexcept> // runtime_error
-#include <string> // to_string
-#include <vector> // vector
-
-// #include <nlohmann/detail/value_t.hpp>
-//     __ _____ _____ _____
-//  __|  |   __|     |   | |  JSON for Modern C++
-// |  |  |__   |  |  | | | |  version 3.11.2
-// |_____|_____|_____|_|___|  https://github.com/nlohmann/json
-//
-// SPDX-FileCopyrightText: 2013-2022 Niels Lohmann <https://nlohmann.me>
-// SPDX-License-Identifier: MIT
-
-
-
-#include <array> // array
-#include <cstddef> // size_t
-#include <cstdint> // uint8_t
-#include <string> // string
-
-// #include <nlohmann/detail/macro_scope.hpp>
-//     __ _____ _____ _____
-//  __|  |   __|     |   | |  JSON for Modern C++
-// |  |  |__   |  |  | | | |  version 3.11.2
-// |_____|_____|_____|_|___|  https://github.com/nlohmann/json
-//
-// SPDX-FileCopyrightText: 2013-2022 Niels Lohmann <https://nlohmann.me>
-// SPDX-License-Identifier: MIT
-
-
-
-#include <utility> // declval, pair
-// #include <nlohmann/detail/meta/detected.hpp>
-//     __ _____ _____ _____
-//  __|  |   __|     |   | |  JSON for Modern C++
-// |  |  |__   |  |  | | | |  version 3.11.2
-// |_____|_____|_____|_|___|  https://github.com/nlohmann/json
-//
-// SPDX-FileCopyrightText: 2013-2022 Niels Lohmann <https://nlohmann.me>
-// SPDX-License-Identifier: MIT
-
-
-
-#include <type_traits>
-
-// #include <nlohmann/detail/meta/void_t.hpp>
-//     __ _____ _____ _____
-//  __|  |   __|     |   | |  JSON for Modern C++
-// |  |  |__   |  |  | | | |  version 3.11.2
-// |_____|_____|_____|_|___|  https://github.com/nlohmann/json
-//
-// SPDX-FileCopyrightText: 2013-2022 Niels Lohmann <https://nlohmann.me>
-// SPDX-License-Identifier: MIT
-
-
-
-// #include <nlohmann/detail/abi_macros.hpp>
-
-
 NLOHMANN_JSON_NAMESPACE_BEGIN
+
 namespace detail
 {
 
@@ -313,21 +263,6 @@ using is_detected_convertible =
 }  // namespace detail
 NLOHMANN_JSON_NAMESPACE_END
 
-// #include <nlohmann/thirdparty/hedley/hedley.hpp>
-
-
-//     __ _____ _____ _____
-//  __|  |   __|     |   | |  JSON for Modern C++
-// |  |  |__   |  |  | | | |  version 3.11.2
-// |_____|_____|_____|_|___|  https://github.com/nlohmann/json
-//
-// SPDX-FileCopyrightText: 2013-2022 Niels Lohmann <https://nlohmann.me>
-// SPDX-FileCopyrightText: 2016-2021 Evan Nemerson <evan@nemerson.com>
-// SPDX-License-Identifier: MIT
-
-/* Hedley - https://nemequ.github.io/hedley
- * Created by Evan Nemerson <evan@nemerson.com>
- */
 
 #if !defined(JSON_HEDLEY_VERSION) || (JSON_HEDLEY_VERSION < 15)
 #if defined(JSON_HEDLEY_VERSION)
