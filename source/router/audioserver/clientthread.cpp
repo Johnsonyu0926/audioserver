@@ -13,6 +13,11 @@
 #include "Rs485NoiseMange.hpp"
 #include <iostream>
 #include <string_view>
+#include "clientthread.h"
+
+void ClientThread::run() {
+    // Thread logic here
+}
 
 bool CClientThread::InitInstance() {
     // Initialization code.
