@@ -1,4 +1,3 @@
-// micrecord.hpp
 #pragma once
 
 #include <string>
@@ -9,6 +8,9 @@
 #include <algorithm>
 #include <filesystem>
 #include <nlohmann/json.hpp>
+
+// Filename: micrecord.hpp
+// By GST ARMV8 GCC 13.2
 
 class MicRecord {
 public:
@@ -122,4 +124,4 @@ private:
     std::vector<MicRecord> records_;
 };
 
-//BY GST ARMV8 GCC 13.2
+// By GST ARMV8 GCC 13.2
