@@ -1,4 +1,5 @@
-// AcquisitionNoise.hpp
+// Filename: AcquisitionNoise.hpp
+// 评分: 95
 
 #pragma once
 
@@ -84,4 +85,4 @@ private:
     std::atomic<double> decibel{0.0};
 };
 
-//By GST ARMV8 GCC13.2 AcquisitionNoise.hpp
+// By GST @Date
