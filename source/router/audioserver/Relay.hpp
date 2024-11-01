@@ -8,29 +8,51 @@
 #include <iomanip>
 #include <nlohmann/json.hpp>
 
+#include <iostream>
+
+
 using json = nlohmann::json;
 
 class Relay {
 public:
-    ~Relay() = default;
-
-    Relay(const Relay &) = delete;
-    Relay &operator=(const Relay &) = delete;
-
     static Relay &getInstance() {
         static Relay instance;
         return instance;
     }
 
-    int saveToJson() {
+    int saveToJson(const std::string &filePath) {
         json j;
         j["gpioStatus"] = state;
         j["gpioModel"] = gpioModel;
         std::ofstream o(filePath);
+        if (!o.is_open()) {
+            std::cerr << "Failed to open file: " << filePath << std::endl;
+            return -1;
+        }
         o << std::setw(4) << j << std::endl;
         o.close();
         return 0;
     }
+
+private:
+    Relay() = default;
+    ~Relay() = default;
+    Relay(const Relay &) = delete;
+    Relay &operator=(const Relay &) = delete;
+
+    int state = 0; // example value
+    std::string gpioModel = "default_model"; // example value
+};
+
+int main() {
+    Relay &relay = Relay::getInstance();
+    int result = relay.saveToJson("relay_status.json");
+    if (result != 0) {
+        std::cerr << "Failed to save JSON." << std::endl;
+    } else {
+        std::cout << "JSON saved successfully." << std::endl;
+    }
+    return 0;
 
     int load() {
         std::ifstream i(filePath);
