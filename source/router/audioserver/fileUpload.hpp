@@ -2,6 +2,7 @@
 
 #include "json.hpp"
 #include "utils.h"
+#include <string>
 #include "add_custom_audio_file.hpp"
 
 namespace asns {
@@ -20,6 +21,11 @@ namespace asns {
             resultId = 2;
             msg = str;
         }
+class FileUpload {
+public:
+    FileUpload(const std::string& filePath) : filePath(filePath) {}
+
+    std::string getFilePath() const { return filePath; }
 
     private:
         std::string cmd;
@@ -71,5 +77,7 @@ namespace asns {
         std::string cmd;
         std::string downloadUrl;
         std::string fileName;
+    std::string filePath;
+
     };
 }
