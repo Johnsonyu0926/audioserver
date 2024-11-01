@@ -27,20 +27,12 @@ using namespace std;
 class AudioPlayStatus {
 public:
     AudioPlayStatus() : status("stopped") {}
-    ~AudioPlayStatus() = default;
 
-    // 获取播放状态
-    string getStatus() const {
-        return status;
-    }
-
-    // 设置播放状态
-    void setStatus(const string& newStatus) {
-        status = newStatus;
-    }
+    std::string getStatus() const { return status; }
+    void setStatus(const std::string& stat) { status = stat; }
 
 private:
-    string status;
+    std::string status;
 };
 
 class PlayStatus {
