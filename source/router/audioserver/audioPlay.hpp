@@ -1,4 +1,3 @@
-// audioplay.hpp
 #pragma once
 
 #include <string>
@@ -10,6 +9,26 @@
 
 namespace asns {
 
+class AudioPlay {
+public:
+    AudioPlay() : isPlaying(false) {}
+
+    void play(const std::string& file) {
+        isPlaying = true;
+        // Play logic here
+    }
+
+    void stop() {
+        isPlaying = false;
+        // Stop logic here
+    }
+
+    bool getIsPlaying() const { return isPlaying; }
+
+private:
+    bool isPlaying;
+};
+
 class CAudioPlayResult {
 public:
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(CAudioPlayResult, cmd, resultId, msg)
@@ -20,7 +39,7 @@ public:
         msg = "play success";
     }
 
-    void do_fail(std::string_view str) {
+    void do_fail(const std::string& str) {
         cmd = "AudioPlay";
         resultId = 2;
         msg = str;
@@ -36,7 +55,7 @@ class CAudioPlay {
 public:
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(CAudioPlay, cmd, audioName, playType, duration)
 
-    [[nodiscard]] int do_req(std::shared_ptr<CSocket> pClient) {
+    [[nodiscard]] int do_req(const std::shared_ptr<CSocket>& pClient) {
         CAudioCfgBusiness cfg;
         cfg.load();
         CAudioPlayResult audioPlayResult;
@@ -63,9 +82,11 @@ public:
                     if (duration < 1) {
                         audioPlayResult.do_fail("parameter cannot be less than 1");
                     } else {
-                        (playType == 1) ? 
-                            AudioPlayUtil::audio_num_play(duration, cfg.getAudioFilePath() + audioName, ASYNC_START) :
+                        if (playType == 1) {
+                            AudioPlayUtil::audio_num_play(duration, cfg.getAudioFilePath() + audioName, ASYNC_START);
+                        } else {
                             AudioPlayUtil::audio_time_play(duration, cfg.getAudioFilePath() + audioName, ASYNC_START);
+                        }
                     }
                     break;
                 default:
@@ -95,4 +116,4 @@ private:
 
 } // namespace asns
 
-//By GST ARMV8 GCC13.2 audioplay.hpp
+// By GST ARMV8 GCC13.2 audioplay.hpp
